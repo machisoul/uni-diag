@@ -1,16 +1,44 @@
 import React from "react";
+import { Fieldset } from "./ui";
 
-const ActionLogPanel: React.FC = () => {
-  // 这里可以用 props 或 context 传递日志内容，先用静态内容
+export interface LogEntry {
+  timestamp: string;
+  message: string;
+}
+
+export interface ActionLogPanelProps {
+  logs?: LogEntry[];
+  height?: string;
+}
+
+const ActionLogPanel: React.FC<ActionLogPanelProps> = ({
+  logs = [
+    { timestamp: "11:41:29", message: "handleAction: start" },
+    { timestamp: "11:41:29", message: "handleAction: wait" }
+  ],
+  height = "200px"
+}) => {
   return (
     <div className="action-log-panel">
-      <fieldset>
-        <legend>操作日志</legend>
-        <div style={{ height: '100px', overflowY: 'auto', background: '#f5f5f5', padding: '8px' }}>
-          <div>11:41:29 handleAction: start</div>
-          <div>11:41:29 handleAction: wait</div>
+      <Fieldset legend="操作日志">
+        <div
+          className="log-content action-log-content"
+          style={{
+            height,
+            overflowY: 'auto',
+            background: '#f5f5f5',
+            padding: '8px',
+            borderRadius: '4px'
+          }}
+        >
+          {logs.map((log, index) => (
+            <div key={index} className="log-entry action-log-entry">
+              <span className="log-timestamp">{log.timestamp}</span>
+              <span className="log-message">{log.message}</span>
+            </div>
+          ))}
         </div>
-      </fieldset>
+      </Fieldset>
     </div>
   );
 };

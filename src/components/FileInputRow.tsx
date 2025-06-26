@@ -1,4 +1,6 @@
 import React from "react";
+import { Button, Input, Select, FormRow } from "./ui";
+import type { SelectOption } from "./ui";
 
 type FileInputRowProps = {
   label: string;
@@ -8,19 +10,31 @@ type FileInputRowProps = {
   buttonText: string;
 };
 
-const FileInputRow: React.FC<FileInputRowProps> = ({ label, defaultValue, file, actionOptions, buttonText }) => {
+const FileInputRow: React.FC<FileInputRowProps> = ({
+  label,
+  defaultValue,
+  file,
+  actionOptions,
+  buttonText
+}) => {
+  // 将字符串数组转换为SelectOption数组
+  const selectOptions: SelectOption[] = actionOptions.map(option => ({
+    value: option,
+    label: option
+  }));
+
   return (
-    <div className="file-input-row">
-      <label>{label}</label>
-      {defaultValue && <input type="text" defaultValue={defaultValue} />}
-      {file && <input type="text" defaultValue={file} />}
-      <select>
-        {actionOptions.map((opt, idx) => (
-          <option key={idx}>{opt}</option>
-        ))}
-      </select>
-      <button>{buttonText}</button>
-    </div>
+    <FormRow className="file-input-row">
+      <span className="file-input-label">{label}</span>
+      {defaultValue && (
+        <Input type="text" defaultValue={defaultValue} />
+      )}
+      {file && (
+        <Input type="text" defaultValue={file} />
+      )}
+      <Select options={selectOptions} defaultValue={actionOptions[0]} />
+      <Button>{buttonText}</Button>
+    </FormRow>
   );
 };
 

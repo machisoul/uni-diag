@@ -1,16 +1,18 @@
 import React from "react";
 import "./assets/styles/global.css";
 import EcuConnectionPanel from "./components/EcuConnectionPanel";
-import BasicDiagnosisPanel from "./components/BasicDiagnosisPanel";
+import MainOperationArea from "./components/MainOperationArea";
 import ActionLogPanel from "./components/ActionLogPanel";
+import DiagMsgPanel from "./components/DiagMsgPanel";
 
 const DiagApp: React.FC = () => (
   <div className="diag-app">
-    <h1>大卓平台软件Diag客户端 - v3.0.3</h1>
+    <h1>UniDiag Client v1.0.0</h1>
     <EcuConnectionPanel />
-    <BasicDiagnosisPanel />
+    <MainOperationArea />
     <div className="log-section">
       <ActionLogPanel />
+      <DiagMsgPanel />
     </div>
   </div>
 );

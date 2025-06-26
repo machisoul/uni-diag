@@ -1,6 +1,6 @@
 import React from "react";
-import FileInputRow from "./FileInputRow";
-import { Fieldset } from "./ui";
+import FileInputRow from "../FileInputRow";
+import { Fieldset } from "../ui";
 
 const diagnosisRows = [
   {
@@ -42,10 +42,10 @@ const diagnosisRows = [
   }
 ];
 
-const BasicDiagnosisPanel: React.FC = () => {
+const BasicDiagnosisPage: React.FC = () => {
   return (
-    <div className="basic-diagnosis-panel">
-      <Fieldset legend="基础诊断">
+    <div className="basic-diagnosis-page">
+      <Fieldset legend="基础诊断操作">
         {diagnosisRows.map((row, idx) => (
           <FileInputRow key={idx} {...row} />
         ))}
@@ -54,4 +54,4 @@ const BasicDiagnosisPanel: React.FC = () => {
   );
 };
 
-export default BasicDiagnosisPanel; 
+export default BasicDiagnosisPage;
