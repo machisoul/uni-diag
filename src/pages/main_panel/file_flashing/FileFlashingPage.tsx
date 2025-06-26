@@ -1,6 +1,6 @@
 import React from "react";
-import { Fieldset, FormRow, Input, Select, Button } from "../ui";
-import type { SelectOption } from "../ui";
+import { Fieldset, FormRow, Input, Select, Button } from "../../../components";
+import type { SelectOption } from "../../../components";
 
 const flashingModeOptions: SelectOption[] = [
   { value: "full", label: "完整刷写" },
@@ -20,57 +20,57 @@ const FileFlashingPage: React.FC = () => {
     <div className="file-flashing-page">
       <Fieldset legend="文件刷写配置">
         <FormRow>
-          <Input 
-            label="刷写文件路径" 
-            type="text" 
+          <Input
+            label="刷写文件路径"
+            type="text"
             placeholder="选择要刷写的文件..."
           />
           <Button variant="secondary">浏览</Button>
         </FormRow>
-        
+
         <FormRow>
-          <Select 
+          <Select
             label="刷写模式"
             options={flashingModeOptions}
             defaultValue="full"
           />
-          <Select 
+          <Select
             label="目标区域"
             options={targetOptions}
             defaultValue="app"
           />
         </FormRow>
-        
+
         <FormRow>
-          <Input 
-            label="起始地址" 
-            type="text" 
+          <Input
+            label="起始地址"
+            type="text"
             defaultValue="0x8000"
             placeholder="0x8000"
           />
-          <Input 
-            label="结束地址" 
-            type="text" 
+          <Input
+            label="结束地址"
+            type="text"
             defaultValue="0x80000"
             placeholder="0x80000"
           />
         </FormRow>
-        
+
         <FormRow>
-          <Input 
-            label="块大小" 
-            type="text" 
+          <Input
+            label="块大小"
+            type="text"
             defaultValue="1024"
             placeholder="1024"
           />
-          <Input 
-            label="超时时间(ms)" 
-            type="text" 
+          <Input
+            label="超时时间(ms)"
+            type="text"
             defaultValue="5000"
             placeholder="5000"
           />
         </FormRow>
-        
+
         <FormRow>
           <Button>开始刷写</Button>
           <Button variant="secondary">暂停</Button>
@@ -78,7 +78,7 @@ const FileFlashingPage: React.FC = () => {
           <Button variant="secondary">验证</Button>
         </FormRow>
       </Fieldset>
-      
+
       <Fieldset legend="刷写进度">
         <div className="progress-container">
           <div className="progress-bar">

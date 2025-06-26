@@ -1,5 +1,5 @@
 /* 导入UI组件样式 */
-@import '../../components/ui/ui.css';
+@import '../../components/ui.css';
 
 /* 设置视口和基础样式 */
 * {

@@ -201,8 +201,14 @@
 .fieldset {
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 16px;
-  margin: 16px 0;
+  padding: 12px;
+  margin: 12px 0;
+}
+
+/* 基础诊断页面的Fieldset更紧凑 */
+.basic-diagnosis-page .fieldset {
+  padding: 8px;
+  margin: 8px 0;
 }
 
 .fieldset-legend {
@@ -215,20 +221,52 @@
 .form-row {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
+/* UDS服务行中的FormRow特殊样式 */
+.uds-service-row .form-row {
+  margin-bottom: 4px;
+}
+
 .form-row-gap-small {
-  gap: 8px;
+  gap: 6px;
 }
 
 .form-row-gap-medium {
-  gap: 16px;
+  gap: 12px;
 }
 
 .form-row-gap-large {
-  gap: 24px;
+  gap: 18px;
+}
+
+/* UDS服务行中的间距更小 */
+.uds-service-row .form-row-gap-medium {
+  gap: 8px;
+}
+
+/* UDS服务行中的输入组件样式 */
+.uds-service-row .input-wrapper {
+  gap: 2px;
+}
+
+.uds-service-row .input-label,
+.uds-service-row .select-label {
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.uds-service-row .input,
+.uds-service-row .select {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.uds-service-row .button {
+  padding: 4px 12px;
+  font-size: 13px;
 }
 
 /* 移动端FormRow适配 */
@@ -236,7 +274,11 @@
   .form-row {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px !important;
+    gap: 8px !important;
+  }
+
+  .uds-service-row .form-row {
+    gap: 6px !important;
   }
 }
 
@@ -559,8 +601,98 @@
   color: #f57c00;
 }
 
+/* UDS服务行样式 */
+.uds-service-row {
+  margin-bottom: 6px;
+  padding: 6px 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.service-main-row {
+  align-items: flex-start;
+}
+
+.service-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.service-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.service-id {
+  font-weight: 600;
+  color: #007bff;
+  font-family: monospace;
+  font-size: 14px;
+}
+
+.service-name {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+/* 连接状态样式 */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.status-indicator {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.status-indicator.connected {
+  color: #28a745;
+}
+
+.status-indicator.disconnected {
+  color: #6c757d;
+}
+
+.connection-info {
+  font-size: 12px;
+  color: #666;
+  font-family: monospace;
+}
+
 /* 移动端页面适配 */
 @media (max-width: 768px) {
+  .connection-status {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .uds-service-row {
+    padding: 4px 6px;
+    margin-bottom: 4px;
+  }
+
+  .service-main-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .service-info {
+    min-width: auto;
+  }
+
+  .service-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
 
   .fault-header,
   .fault-row {

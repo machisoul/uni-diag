@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 
 // 导入各个操作页面组件
-import BasicDiagnosisPage from "./pages/BasicDiagnosisPage";
-import FileFlashingPage from "./pages/FileFlashingPage";
-import SignatureVerificationPage from "./pages/SignatureVerificationPage";
-import FileTransferPage from "./pages/FileTransferPage";
-import FaultAnalysisPage from "./pages/FaultAnalysisPage";
+import BasicDiagnosisPage from "./basic_diag/BasicDiagnosisPage";
+import FileFlashingPage from "./file_flashing/FileFlashingPage";
 
 export type MenuTab = "basic" | "flashing" | "signature" | "transfer" | "fault";
 
@@ -19,9 +16,6 @@ const MainOperationArea: React.FC<MainOperationAreaProps> = ({ className = "" })
   const menuItems = [
     { key: "basic" as MenuTab, label: "基础诊断" },
     { key: "flashing" as MenuTab, label: "文件刷写" },
-    { key: "signature" as MenuTab, label: "加签验密" },
-    { key: "transfer" as MenuTab, label: "文件传输" },
-    { key: "fault" as MenuTab, label: "故障解析" }
   ];
 
   const renderContent = () => {
@@ -30,12 +24,6 @@ const MainOperationArea: React.FC<MainOperationAreaProps> = ({ className = "" })
         return <BasicDiagnosisPage />;
       case "flashing":
         return <FileFlashingPage />;
-      case "signature":
-        return <SignatureVerificationPage />;
-      case "transfer":
-        return <FileTransferPage />;
-      case "fault":
-        return <FaultAnalysisPage />;
       default:
         return <BasicDiagnosisPage />;
     }

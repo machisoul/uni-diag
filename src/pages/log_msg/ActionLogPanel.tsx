@@ -1,5 +1,5 @@
 import React from "react";
-import { Fieldset } from "./ui";
+import { Fieldset } from "../../components";
 
 export interface LogEntry {
   timestamp: string;

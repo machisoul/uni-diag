@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Input, Select, FormRow } from "./ui";
-import type { SelectOption } from "./ui";
+import { Button, Input, Select, FormRow } from "./";
+import type { SelectOption } from "./";
 
 type FileInputRowProps = {
   label: string;
