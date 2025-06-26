@@ -12,9 +12,22 @@
   "app": {
     "windows": [
       {
-        "title": "uni-diag",
-        "width": 800,
-        "height": 600
+        "title": "UniDiag - 汽车诊断工具",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 1000,
+        "minHeight": 700,
+        "center": true,
+        "resizable": true,
+        "maximizable": true,
+        "minimizable": true,
+        "closable": true,
+        "decorations": true,
+        "alwaysOnTop": false,
+        "fullscreen": false,
+        "focus": true,
+        "transparent": false,
+        "visible": true
       }
     ],
     "security": {

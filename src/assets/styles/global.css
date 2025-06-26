@@ -7,28 +7,33 @@
 }
 
 body {
-  font-family: "Microsoft YaHei", Arial, sans-serif;
-  background: #f8f9fa;
+  font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+  background: #f5f5f5;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  /* 防止文本选择 */
 }
 
 .diag-app {
-  max-width: 1200px;
   width: 100%;
-  margin: 0 auto;
+  height: 100vh;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 24px;
-  min-height: 100vh;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
   text-align: center;
   font-size: 1.5rem;
-  margin-bottom: 24px;
+  margin: 0 0 20px 0;
+  padding: 0;
+  color: #333;
+  font-weight: 600;
 }
 
 /* 移动端适配 */
@@ -128,17 +133,23 @@ button:hover {
 .log-section {
   display: flex;
   gap: 16px;
-  margin-top: 18px;
+  margin-top: 20px;
+  flex: 1;
+  min-height: 0;
 }
 
 .action-log-panel {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .diag-msg-panel {
   flex: 2;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 移动端日志区域适配 */
@@ -169,4 +180,122 @@ button:hover {
     padding: 8px 12px 12px 12px;
     margin-bottom: 12px;
   }
+}
+
+/* 桌面应用特有样式 */
+.ecu-connection-panel {
+  margin-bottom: 16px;
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.status-indicator {
+  font-weight: bold;
+}
+
+.status-indicator.connected {
+  color: #4caf50;
+}
+
+.status-indicator.disconnected {
+  color: #f44336;
+}
+
+.connection-info {
+  color: #666;
+  font-family: monospace;
+}
+
+/* 日志内容样式 */
+.log-content {
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.log-entry {
+  margin-bottom: 2px;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.log-timestamp {
+  color: #666;
+  margin-right: 8px;
+}
+
+.log-type {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.diagnostic-log-entry.diagnostic-info .log-type {
+  color: #2196f3;
+}
+
+.diagnostic-log-entry.diagnostic-success .log-type {
+  color: #4caf50;
+}
+
+.diagnostic-log-entry.diagnostic-warning .log-type {
+  color: #ff9800;
+}
+
+.diagnostic-log-entry.diagnostic-error .log-type {
+  color: #f44336;
+}
+
+/* UDS 服务行样式 */
+.uds-service-row {
+  margin-bottom: 8px;
+}
+
+.service-main-row {
+  align-items: center;
+}
+
+.service-info {
+  min-width: 120px;
+}
+
+.service-title {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.service-id {
+  font-family: monospace;
+  font-weight: bold;
+  color: #1976d2;
+  font-size: 12px;
+}
+
+.service-name {
+  font-size: 14px;
+  color: #333;
+}
+
+/* 滚动条样式 */
+.log-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.log-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.log-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.log-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
