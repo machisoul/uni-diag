@@ -5,7 +5,6 @@
 
 import { DoipClient, DoipClientConfig } from './DoipClient';
 import { UdsService, UdsConfig, UdsResponse } from './UdsService';
-import { SecurityAccessAlgorithm } from './SecurityAccessAlgorithm';
 
 export interface DiagnosticResult {
   success: boolean;
@@ -35,7 +34,6 @@ export class UdsClientManager {
     try {
       this.connectionConfig = config;
 
-      // 创建DoIP客户端
       const doipConfig: DoipClientConfig = {
         ipAddress: config.ipAddress,
         port: config.port,
@@ -44,7 +42,6 @@ export class UdsClientManager {
 
       this.doipClient = new DoipClient(doipConfig);
 
-      // 连接
       const connected = await this.doipClient.connect();
       if (!connected) {
         return {
@@ -263,15 +260,6 @@ export class UdsClientManager {
       bytes[i / 2] = parseInt(cleanHex.substring(i, i + 2), 16);
     }
     return bytes;
-  }
-
-  /**
-   * 工具函数：字节数组转十六进制字符串
-   */
-  private bytesToHexString(bytes: Uint8Array): string {
-    return Array.from(bytes)
-      .map(byte => byte.toString(16).padStart(2, '0'))
-      .join(' ');
   }
 }
 

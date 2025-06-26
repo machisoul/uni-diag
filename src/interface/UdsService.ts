@@ -3,7 +3,7 @@
  * 提供完整的UDS诊断服务功能
  */
 
-import { DoipClient, hexToBytes, bytesToHex } from './DoipClient';
+import { DoipClient, hexToBytes } from './DoipClient';
 import { SecurityAccessAlgorithm } from './SecurityAccessAlgorithm';
 
 export interface VehicleConfig {
@@ -416,7 +416,6 @@ export class UdsService {
       }
     } catch (error) {
       this.log('error', `Read data identifier failed: ${error}`);
-      return { success: false, error: error.toString() };
     }
   }
 
@@ -466,7 +465,6 @@ export class UdsService {
       }
     } catch (error) {
       this.log('error', `Write data identifier failed: ${error}`);
-      return { success: false, error: error.toString() };
     }
   }
 
@@ -664,7 +662,6 @@ export class UdsService {
       }
     } catch (error) {
       this.log('error', `Read DTC information failed: ${error}`);
-      return { success: false, error: error.toString() };
     }
   }
 

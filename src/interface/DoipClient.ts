@@ -27,8 +27,6 @@ export class DoipClient {
    */
   async connect(): Promise<boolean> {
     try {
-      // 在浏览器环境中，我们使用WebSocket或者通过后端代理
-      // 这里提供一个基础实现框架
       const url = `ws://${this.ipAddress}:${this.port}`;
 
       return new Promise((resolve, reject) => {

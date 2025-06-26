@@ -17,7 +17,6 @@ const FileInputRow: React.FC<FileInputRowProps> = ({
   actionOptions,
   buttonText
 }) => {
-  // 将字符串数组转换为SelectOption数组
   const selectOptions: SelectOption[] = actionOptions.map(option => ({
     value: option,
     label: option

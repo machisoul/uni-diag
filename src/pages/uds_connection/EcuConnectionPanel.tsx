@@ -11,23 +11,19 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
   onConnectionChange,
   onLog
 }) => {
-  // 表单状态
   const [serverIp, setServerIp] = useState("192.168.2.56");
   const [port, setPort] = useState("13400");
   const [clientAddress, setClientAddress] = useState("0x0E80");
   const [serverAddress, setServerAddress] = useState("0x07C0");
   const [functionalAddress, setFunctionalAddress] = useState("0xE400");
 
-  // UDS服务状态
   const [udsState, udsActions] = useUdsService();
 
-  // 日志记录
   const logMessage = useCallback((message: string, type: 'info' | 'error' | 'success' = 'info') => {
     console.log(`[ECU连接] ${message}`);
     onLog?.(message, type);
   }, [onLog]);
 
-  // 连接ECU
   const handleConnect = useCallback(async () => {
     try {
       logMessage("正在连接ECU...", 'info');
@@ -55,7 +51,6 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
     }
   }, [serverIp, port, serverAddress, clientAddress, udsActions, logMessage, onConnectionChange]);
 
-  // 断开连接
   const handleDisconnect = useCallback(async () => {
     try {
       logMessage("正在断开连接...", 'info');
