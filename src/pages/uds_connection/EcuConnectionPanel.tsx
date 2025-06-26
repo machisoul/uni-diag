@@ -29,10 +29,10 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
       logMessage("正在连接ECU...", 'info');
 
       const config = {
-        ipAddress: serverIp,
+        ip_address: serverIp,
         port: parseInt(port),
-        serverAddress: serverAddress,
-        clientAddress: clientAddress,
+        server_address: serverAddress,
+        client_address: clientAddress,
         timeout: 30000
       };
 
@@ -162,7 +162,7 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
             </span>
             {udsState.connectionConfig && (
               <span className="connection-info">
-                {udsState.connectionConfig.ipAddress}:{udsState.connectionConfig.port}
+                {udsState.connectionConfig.ip_address}:{udsState.connectionConfig.port}
               </span>
             )}
           </div>

@@ -19,7 +19,7 @@ export interface UdsServiceActions {
   disconnect: () => Promise<DiagnosticResult>;
   sendCommand: (serviceId: string, data: string) => Promise<DiagnosticResult>;
   clearLogs: () => void;
-  getConnectionStatus: () => boolean;
+  getConnectionStatus: () => Promise<boolean>;
 }
 
 export function useUdsService(): [UdsServiceState, UdsServiceActions] {
@@ -137,8 +137,8 @@ export function useUdsService(): [UdsServiceState, UdsServiceActions] {
     }));
   }, []);
 
-  const getConnectionStatus = useCallback((): boolean => {
-    return udsClientManager.getConnectionStatus();
+  const getConnectionStatus = useCallback(async (): Promise<boolean> => {
+    return await udsClientManager.getConnectionStatusAsync();
   }, []);
 
   const actions: UdsServiceActions = {
