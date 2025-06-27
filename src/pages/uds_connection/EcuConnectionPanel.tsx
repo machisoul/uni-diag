@@ -11,7 +11,7 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
   onConnectionChange,
   onLog
 }) => {
-  const [serverIp, setServerIp] = useState("192.168.2.56");
+  const [serverIp, setServerIp] = useState("10.113.129.22");
   const [port, setPort] = useState("13400");
   const [clientAddress, setClientAddress] = useState("0x0E80");
   const [serverAddress, setServerAddress] = useState("0x07C0");

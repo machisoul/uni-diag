@@ -37,6 +37,8 @@ impl UdsClientManager {
 
         match doip_client.connect().await {
             Ok(true) => {
+                println!("TCP connection established successfully");
+
                 // 创建 UDS 服务
                 let uds_config = UdsConfig {
                     vehicle_info: crate::types::VehicleConfig {
@@ -44,6 +46,11 @@ impl UdsClientManager {
                         client_address: config.client_address.clone(),
                     },
                 };
+
+                println!(
+                    "Creating UDS service with server_address: {}, client_address: {}",
+                    config.server_address, config.client_address
+                );
 
                 match UdsService::new(doip_client, uds_config) {
                     Ok(mut uds_service) => {
@@ -56,19 +63,29 @@ impl UdsClientManager {
                                 DiagnosticResult {
                                     success: true,
                                     message: format!(
-                                        "成功连接到ECU {}:{}",
+                                        "成功连接到ECU {}:{} 并完成路由激活",
                                         config.ip_address, config.port
                                     ),
                                     data: None,
                                     timestamp: get_timestamp(),
                                 }
                             }
-                            Ok(false) | Err(_) => DiagnosticResult {
+                            Ok(false) => DiagnosticResult {
                                 success: false,
-                                message: "路由激活失败".to_string(),
+                                message: "路由激活被拒绝".to_string(),
                                 data: None,
                                 timestamp: get_timestamp(),
                             },
+                            Err(e) => {
+                                // 记录详细的路由激活失败信息
+                                eprintln!("Routing activation failed: {:?}", e);
+                                DiagnosticResult {
+                                    success: false,
+                                    message: format!("路由激活失败: {:?}", e),
+                                    data: None,
+                                    timestamp: get_timestamp(),
+                                }
+                            }
                         }
                     }
                     Err(e) => DiagnosticResult {

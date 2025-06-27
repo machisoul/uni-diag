@@ -33,6 +33,11 @@ impl UdsService {
         let client_address = hex_to_address_bytes(&config.vehicle_info.client_address)
             .map_err(|e| UdsError::InvalidParameter(format!("Invalid client address: {}", e)))?;
 
+        println!(
+            "Parsed addresses - Server: {:02X?}, Client: {:02X?}",
+            server_address, client_address
+        );
+
         // DoIP 协议头
         let doip_head_bytes = hex_to_bytes("02 fd 80 01")
             .map_err(|e| UdsError::InvalidParameter(format!("Invalid DoIP header: {}", e)))?;
@@ -101,32 +106,131 @@ impl UdsService {
 
     /// 路由激活
     pub async fn routine_active(&mut self) -> UdsResult<bool> {
-        let request = hex_to_bytes("02 fd 00 05 00 00 00 0b 0e 80 00 00 00 00 00 ff ff ff ff")
-            .map_err(|e| {
-                UdsError::InvalidParameter(format!("Invalid routine active request: {}", e))
-            })?;
+        self.log("info", "Sending routing activation request...");
 
+        // 构建DoIP路由激活请求
+        let mut request = Vec::new();
+
+        // DoIP 头部：协议版本(02) + 反向协议版本(FD) + 负载类型(0005 = 路由激活请求)
+        request.extend_from_slice(&[0x02, 0xFD, 0x00, 0x05]);
+
+        // 负载长度：11字节 (源地址2 + 激活类型1 + 保留4 + OEM特定4)
+        request.extend_from_slice(&[0x00, 0x00, 0x00, 0x0B]);
+
+        // 源地址（客户端地址）- 使用配置的地址而不是硬编码
+        request.extend_from_slice(&self.client_address);
+
+        // 激活类型：0x00 = 默认激活
+        request.push(0x00);
+
+        // 保留字段：4字节全0
+        request.extend_from_slice(&[0x00, 0x00, 0x00, 0x00]);
+
+        // OEM特定字段：4字节全0xFF
+        request.extend_from_slice(&[0xFF, 0xFF, 0xFF, 0xFF]);
+
+        self.log(
+            "debug",
+            &format!("Routing activation request: {:02X?}", request),
+        );
+
+        // 打印请求的十六进制格式以便调试
+        let hex_request: String = request
+            .iter()
+            .map(|b| format!("{:02X}", b))
+            .collect::<Vec<_>>()
+            .join(" ");
+        println!("Routing activation request hex: {}", hex_request);
+
+        // 发送请求
         self.client
             .send(&request)
             .await
             .map_err(UdsError::DoipError)?;
 
+        // 等待响应
         let response = self.doip_receive_handle(&[0x00]).await?;
 
-        // 检查响应
-        let mut expected_start = hex_to_bytes("02 fd 00 06 00 00 00 09")
-            .map_err(|e| UdsError::InvalidParameter(format!("Invalid expected response: {}", e)))?;
-        expected_start.extend_from_slice(&self.doip_address_bytes);
-        expected_start.extend_from_slice(&hex_to_bytes("10 00 00 00 00").map_err(|e| {
-            UdsError::InvalidParameter(format!("Invalid expected response suffix: {}", e))
-        })?);
+        self.log(
+            "debug",
+            &format!("Routing activation response: {:02X?}", response),
+        );
 
-        if starts_with(&response, &expected_start) {
-            self.log("info", "Routine active granted");
-            Ok(true)
+        // 打印响应的十六进制格式以便调试
+        let hex_response: String = response
+            .iter()
+            .map(|b| format!("{:02X}", b))
+            .collect::<Vec<_>>()
+            .join(" ");
+        println!("Routing activation response hex: {}", hex_response);
+
+        // 检查响应格式：DoIP头部 + 负载类型(0x0006 = 路由激活响应)
+        if response.len() >= 8
+            && response[0] == 0x02
+            && response[1] == 0xFD
+            && response[2] == 0x00
+            && response[3] == 0x06
+        {
+            if response.len() >= 13 {
+                let response_code = response[response.len() - 5];
+                match response_code {
+                    0x10 => {
+                        self.log("info", "Routing activation successful");
+                        Ok(true)
+                    }
+                    0x00 => {
+                        self.log(
+                            "error",
+                            "Routing activation denied - unknown source address",
+                        );
+
+                        Err(UdsError::RequestDenied(
+                            "Unknown source address - tried multiple addresses".to_string(),
+                        ))
+                    }
+                    0x01 => {
+                        self.log(
+                            "error",
+                            "Routing activation denied - all sockets registered",
+                        );
+                        Err(UdsError::RequestDenied(
+                            "All sockets registered".to_string(),
+                        ))
+                    }
+                    0x02 => {
+                        self.log(
+                            "error",
+                            "Routing activation denied - source address already registered",
+                        );
+                        Err(UdsError::RequestDenied(
+                            "Source address already registered".to_string(),
+                        ))
+                    }
+                    _ => {
+                        self.log(
+                            "error",
+                            &format!(
+                                "Routing activation failed with response code: 0x{:02X}",
+                                response_code
+                            ),
+                        );
+                        Err(UdsError::RequestDenied(format!(
+                            "Response code: 0x{:02X}",
+                            response_code
+                        )))
+                    }
+                }
+            } else {
+                self.log("error", "Routing activation response too short");
+                Err(UdsError::RequestDenied(
+                    "Invalid response length".to_string(),
+                ))
+            }
         } else {
-            self.log("error", "Routine active denied or error occurred");
-            Err(UdsError::RequestDenied("Routine active denied".to_string()))
+            self.log("error", "Invalid routing activation response format");
+            Err(UdsError::RequestDenied(
+                "Invalid response format".to_string(),
+            ))
         }
     }
 
