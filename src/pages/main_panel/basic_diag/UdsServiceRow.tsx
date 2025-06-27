@@ -19,8 +19,17 @@ const UdsServiceRow: React.FC<UdsServiceRowProps> = ({ service, onSend }) => {
   const [customData, setCustomData] = useState(service.defaultData);
 
   const handleSend = () => {
+    console.log("UdsServiceRow handleSend clicked");
+    console.log("onSend function:", onSend);
+    console.log("service.serviceId:", service.serviceId);
+    console.log("customData:", customData);
+    console.log("selectedSubService:", selectedSubService);
+
     if (onSend) {
+      console.log("Calling onSend function...");
       onSend(service.serviceId, customData, selectedSubService);
+    } else {
+      console.error("onSend function is not provided");
     }
   };
 

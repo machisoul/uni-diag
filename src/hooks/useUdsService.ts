@@ -20,6 +20,7 @@ export interface UdsServiceActions {
   sendCommand: (serviceId: string, data: string) => Promise<DiagnosticResult>;
   clearLogs: () => void;
   getConnectionStatus: () => Promise<boolean>;
+  updateConnectionStatus: (isConnected: boolean, config?: ConnectionConfig) => void;
 }
 
 export function useUdsService(): [UdsServiceState, UdsServiceActions] {
@@ -101,17 +102,7 @@ export function useUdsService(): [UdsServiceState, UdsServiceActions] {
   }, [addLog]);
 
   const sendCommand = useCallback(async (serviceId: string, data: string): Promise<DiagnosticResult> => {
-    if (!state.isConnected) {
-      const errorResult: DiagnosticResult = {
-        success: false,
-        message: '未连接到ECU，请先建立连接',
-        timestamp: new Date().toISOString()
-      };
-
-      addLog(errorResult);
-      return errorResult;
-    }
-
+    // 移除内部连接状态检查，让组件层面处理
     try {
       const result = await udsClientManager.sendUdsCommand(serviceId, data);
       addLog(result);
@@ -126,7 +117,7 @@ export function useUdsService(): [UdsServiceState, UdsServiceActions] {
       addLog(errorResult);
       return errorResult;
     }
-  }, [state.isConnected, addLog]);
+  }, [addLog]);
 
   const clearLogs = useCallback(() => {
     logsRef.current = [];
@@ -141,12 +132,21 @@ export function useUdsService(): [UdsServiceState, UdsServiceActions] {
     return await udsClientManager.getConnectionStatusAsync();
   }, []);
 
+  const updateConnectionStatus = useCallback((isConnected: boolean, config?: ConnectionConfig) => {
+    setState(prev => ({
+      ...prev,
+      isConnected,
+      connectionConfig: isConnected ? (config || prev.connectionConfig) : null
+    }));
+  }, []);
+
   const actions: UdsServiceActions = {
     connect,
     disconnect,
     sendCommand,
     clearLogs,
-    getConnectionStatus
+    getConnectionStatus,
+    updateConnectionStatus
   };
 
   return [state, actions];

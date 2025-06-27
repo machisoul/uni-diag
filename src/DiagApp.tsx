@@ -8,6 +8,7 @@ import { DiagnosticMessage } from "./pages/log_msg/DiagMsgPanel"
 import DiagMsgPanel from "./pages/log_msg/DiagMsgPanel";
 
 const DiagApp: React.FC = () => {
+  const [isConnected, setIsConnected] = useState(false);
   const [actionLogs, setActionLogs] = useState<LogEntry[]>([
     { timestamp: "11:41:29", message: "应用程序启动" }
   ]);
@@ -17,6 +18,8 @@ const DiagApp: React.FC = () => {
 
   // 处理连接状态变化
   const handleConnectionChange = useCallback((connected: boolean) => {
+    console.log("DiagApp: Connection state changed to:", connected);
+    setIsConnected(connected);
 
     const timestamp = new Date().toLocaleTimeString();
     const message = connected ? "ECU连接已建立" : "ECU连接已断开";
@@ -55,7 +58,7 @@ const DiagApp: React.FC = () => {
         onLog={handleLog}
       />
 
-      <MainOperationArea />
+      <MainOperationArea isConnected={isConnected} />
 
       <div className="log-section">
         <ActionLogPanel logs={actionLogs} />

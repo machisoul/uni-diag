@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UdsServiceRow from "./UdsServiceRow";
 import { useUdsService } from "../../../hooks/useUdsService";
 import type { UdsService } from "./UdsServiceRow";
@@ -129,27 +129,46 @@ const udsServices: UdsService[] = [
   }
 ];
 
-const BasicDiagnosisPage: React.FC = () => {
+export interface BasicDiagnosisPageProps {
+  isConnected?: boolean;
+}
+
+const BasicDiagnosisPage: React.FC<BasicDiagnosisPageProps> = ({ isConnected = false }) => {
   const [udsState, udsActions] = useUdsService();
 
-  const handleSendUdsCommand = async (serviceId: string, data: string, subService: string) => {
-    console.log(`发送UDS命令: ${serviceId}, 数据: ${data}, 子服务: ${subService}`);
+  // 同步外部连接状态到 hook
+  useEffect(() => {
+    console.log("Syncing connection status to hook:", isConnected);
+    udsActions.updateConnectionStatus(isConnected);
+  }, [isConnected, udsActions]);
 
-    if (!udsState.isConnected) {
+  const handleSendUdsCommand = async (serviceId: string, data: string, subService: string) => {
+    console.log("BasicDiagnosisPage handleSendUdsCommand called");
+    console.log(`发送UDS命令: ${serviceId}, 数据: ${data}, 子服务: ${subService}`);
+    console.log("传入的连接状态:", isConnected);
+    console.log("Hook连接状态:", udsState.isConnected);
+
+    if (!isConnected) {
       console.error('未连接到ECU，无法发送命令');
+      alert('未连接到ECU，请先建立连接');
       return;
     }
 
     try {
+      console.log("正在发送UDS命令...");
       const result = await udsActions.sendCommand(serviceId, data);
+      console.log("UDS命令结果:", result);
 
       if (result.success) {
         console.log(`UDS命令执行成功: ${result.message}`);
+        alert(`UDS命令执行成功: ${result.message}`);
       } else {
         console.error(`UDS命令执行失败: ${result.message}`);
+        alert(`UDS命令执行失败: ${result.message}`);
       }
     } catch (error) {
       console.error(`UDS命令执行异常: ${error}`);
+      alert(`UDS命令执行异常: ${error}`);
     }
   };
 

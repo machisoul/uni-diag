@@ -8,9 +8,13 @@ export type MenuTab = "basic" | "flashing" | "signature" | "transfer" | "fault";
 
 export interface MainOperationAreaProps {
   className?: string;
+  isConnected?: boolean;
 }
 
-const MainOperationArea: React.FC<MainOperationAreaProps> = ({ className = "" }) => {
+const MainOperationArea: React.FC<MainOperationAreaProps> = ({
+  className = "",
+  isConnected = false
+}) => {
   const [activeTab, setActiveTab] = useState<MenuTab>("basic");
 
   const menuItems = [
@@ -21,11 +25,11 @@ const MainOperationArea: React.FC<MainOperationAreaProps> = ({ className = "" })
   const renderContent = () => {
     switch (activeTab) {
       case "basic":
-        return <BasicDiagnosisPage />;
+        return <BasicDiagnosisPage isConnected={isConnected} />;
       case "flashing":
         return <FileFlashingPage />;
       default:
-        return <BasicDiagnosisPage />;
+        return <BasicDiagnosisPage isConnected={isConnected} />;
     }
   };
 
