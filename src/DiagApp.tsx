@@ -2,18 +2,13 @@ import React, { useState, useCallback } from "react";
 import "./assets/styles/global.css";
 import EcuConnectionPanel from "./pages/uds_connection/EcuConnectionPanel";
 import MainOperationArea from "./pages/main_panel/MainOperationArea";
-import { LogEntry } from "./pages/log_msg/ActionLogPanel";
-import ActionLogPanel from "./pages/log_msg/ActionLogPanel";
-import { DiagnosticMessage } from "./pages/log_msg/DiagMsgPanel"
-import DiagMsgPanel from "./pages/log_msg/DiagMsgPanel";
+import { LogEntry } from "./pages/log_msg/LogPanel";
+import LogPanel from "./pages/log_msg/LogPanel";
 
 const DiagApp: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
-  const [actionLogs, setActionLogs] = useState<LogEntry[]>([
-    { timestamp: "11:41:29", message: "应用程序启动" }
-  ]);
-  const [diagnosticMessages, setDiagnosticMessages] = useState<DiagnosticMessage[]>([
-    { timestamp: "11:41:30", type: "info", message: "系统初始化完成" }
+  const [systemLogs, setLogs] = useState<LogEntry[]>([
+    { timestamp: new Date().toLocaleTimeString(), message: "应用程序启动" }
   ]);
 
   // 处理连接状态变化
@@ -24,12 +19,7 @@ const DiagApp: React.FC = () => {
     const timestamp = new Date().toLocaleTimeString();
     const message = connected ? "ECU连接已建立" : "ECU连接已断开";
 
-    setActionLogs(prev => [...prev, { timestamp, message }]);
-    setDiagnosticMessages(prev => [...prev, {
-      timestamp,
-      type: connected ? "success" : "info",
-      message
-    }]);
+    setLogs(prev => [...prev, { timestamp, message }]);
   }, []);
 
   // 处理日志消息
@@ -37,16 +27,7 @@ const DiagApp: React.FC = () => {
     const timestamp = new Date().toLocaleTimeString();
 
     // 添加到操作日志
-    setActionLogs(prev => [...prev, { timestamp, message }]);
-
-    // 添加到诊断消息日志
-    const diagType: DiagnosticMessage['type'] = type === 'error' ? 'error' :
-      type === 'success' ? 'success' : 'info';
-    setDiagnosticMessages(prev => [...prev, {
-      timestamp,
-      type: diagType,
-      message
-    }]);
+    setLogs(prev => [...prev, { timestamp, message }]);
   }, []);
 
   return (
@@ -60,10 +41,7 @@ const DiagApp: React.FC = () => {
 
       <MainOperationArea isConnected={isConnected} />
 
-      <div className="log-section">
-        <ActionLogPanel logs={actionLogs} />
-        <DiagMsgPanel messages={diagnosticMessages} />
-      </div>
+      <LogPanel logs={systemLogs} />
     </div>
   );
 };

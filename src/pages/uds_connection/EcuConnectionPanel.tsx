@@ -95,7 +95,7 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
       <Fieldset legend="ECU连接管理">
         <FormRow>
           <Input
-            label="服务器IP"
+            label="IP地址"
             type="text"
             value={serverIp}
             onChange={(e) => setServerIp(e.target.value)}

@@ -6,12 +6,12 @@ export interface LogEntry {
   message: string;
 }
 
-export interface ActionLogPanelProps {
+export interface LogPanelProps {
   logs?: LogEntry[];
   height?: string;
 }
 
-const ActionLogPanel: React.FC<ActionLogPanelProps> = ({
+const LogPanel: React.FC<LogPanelProps> = ({
   logs = [
     { timestamp: "11:41:29", message: "handleAction: start" },
     { timestamp: "11:41:29", message: "handleAction: wait" }
@@ -20,7 +20,7 @@ const ActionLogPanel: React.FC<ActionLogPanelProps> = ({
 }) => {
   return (
     <div className="action-log-panel">
-      <Fieldset legend="操作日志">
+      <Fieldset legend="日志">
         <div
           className="log-content action-log-content"
           style={{
@@ -43,4 +43,4 @@ const ActionLogPanel: React.FC<ActionLogPanelProps> = ({
   );
 };
 
-export default ActionLogPanel; 
+export default LogPanel; 
