@@ -175,13 +175,15 @@ const BasicDiagnosisPage: React.FC<BasicDiagnosisPageProps> = ({ isConnected = f
   return (
     <div className="basic-diagnosis-page">
       <Fieldset legend="UDS诊断服务">
-        {udsServices.map((service, idx) => (
-          <UdsServiceRow
-            key={idx}
-            service={service}
-            onSend={handleSendUdsCommand}
-          />
-        ))}
+        <div className="uds-services-grid">
+          {udsServices.map((service, idx) => (
+            <UdsServiceRow
+              key={idx}
+              service={service}
+              onSend={handleSendUdsCommand}
+            />
+          ))}
+        </div>
       </Fieldset>
     </div>
   );

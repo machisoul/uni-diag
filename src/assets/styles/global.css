@@ -250,35 +250,166 @@ button:hover {
   color: #f44336;
 }
 
-/* UDS 服务行样式 */
-.uds-service-row {
-  margin-bottom: 8px;
+/* UDS 服务网格布局 */
+.uds-services-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 8px 0;
 }
 
-.service-main-row {
-  align-items: center;
+/* UDS 服务项目样式 */
+.uds-service-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 12px;
+  background: #fafafa;
+  transition: all 0.2s ease;
 }
 
-.service-info {
-  min-width: 120px;
+.uds-service-item:hover {
+  border-color: #1976d2;
+  background: #f5f5f5;
 }
 
-.service-title {
+.service-header {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .service-id {
-  font-family: monospace;
+  font-family: "Consolas", "Monaco", monospace;
   font-weight: bold;
   color: #1976d2;
-  font-size: 12px;
+  font-size: 13px;
+  background: #e3f2fd;
+  padding: 2px 6px;
+  border-radius: 3px;
+  min-width: 40px;
+  text-align: center;
 }
 
 .service-name {
   font-size: 14px;
   color: #333;
+  font-weight: 500;
+}
+
+.service-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-label {
+  font-size: 12px;
+  color: #666;
+  min-width: 40px;
+  font-weight: 500;
+}
+
+.service-select {
+  flex: 1;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  background: white;
+  min-height: 24px;
+}
+
+.service-select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.service-input {
+  flex: 1;
+  padding: 4px 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: "Consolas", "Monaco", monospace;
+  background: white;
+  min-height: 24px;
+}
+
+.service-input:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.service-button {
+  padding: 6px 12px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 4px;
+}
+
+.service-button:hover {
+  background: #1565c0;
+}
+
+.service-button:active {
+  background: #0d47a1;
+}
+
+/* 响应式设计 */
+@media (max-width: 1000px) {
+  .uds-services-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .uds-service-item {
+    padding: 10px;
+  }
+
+  .service-header {
+    margin-bottom: 6px;
+  }
+
+  .service-controls {
+    gap: 4px;
+  }
+}
+
+/* 基础诊断页面样式 */
+.basic-diagnosis-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.basic-diagnosis-page fieldset {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.basic-diagnosis-page .uds-services-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 /* 滚动条样式 */

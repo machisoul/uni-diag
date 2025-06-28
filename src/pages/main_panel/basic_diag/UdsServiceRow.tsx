@@ -43,32 +43,43 @@ const UdsServiceRow: React.FC<UdsServiceRowProps> = ({ service, onSend }) => {
   };
 
   return (
-    <div className="uds-service-row">
-      <FormRow className="service-main-row">
-        <div className="service-info">
-          <div className="service-title">
-            <span className="service-id">{service.serviceId}</span>
-            <span className="service-name">{service.serviceName}</span>
-          </div>
+    <div className="uds-service-item">
+      <div className="service-header">
+        <span className="service-id">{service.serviceId}</span>
+        <span className="service-name">{service.serviceName}</span>
+      </div>
+
+      <div className="service-controls">
+        <div className="control-row">
+          <label className="control-label">子服务:</label>
+          <select
+            className="service-select"
+            value={selectedSubService}
+            onChange={(e) => handleSubServiceChange(e.target.value)}
+          >
+            {service.subServices.map((option, idx) => (
+              <option key={idx} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <Select
-          label="子服务"
-          options={service.subServices}
-          value={selectedSubService}
-          onChange={(e) => handleSubServiceChange(e.target.value)}
-        />
+        <div className="control-row">
+          <label className="control-label">数据:</label>
+          <input
+            className="service-input"
+            type="text"
+            value={customData}
+            onChange={(e) => setCustomData(e.target.value)}
+            placeholder="输入十六进制数据"
+          />
+        </div>
 
-        <Input
-          label="数据"
-          type="text"
-          value={customData}
-          onChange={(e) => setCustomData(e.target.value)}
-          placeholder="输入十六进制数据"
-        />
-
-        <Button onClick={handleSend}>发送</Button>
-      </FormRow>
+        <button className="service-button" onClick={handleSend}>
+          发送
+        </button>
+      </div>
     </div>
   );
 };
