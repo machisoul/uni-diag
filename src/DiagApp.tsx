@@ -26,8 +26,9 @@ const DiagApp: React.FC = () => {
   const handleLog = useCallback((message: string, type: 'info' | 'error' | 'success') => {
     const timestamp = new Date().toLocaleTimeString();
 
-    // 添加到操作日志
+    // 添加到操作日志 (type参数暂时未使用，但保留用于未来扩展)
     setLogs(prev => [...prev, { timestamp, message }]);
+    console.log(`[${type.toUpperCase()}] ${message}`);
   }, []);
 
   return (

@@ -1,11 +1,13 @@
 // 模块声明
 mod doip_client;
+mod ping;
 mod security_algorithm;
 mod types;
 mod uds_client_manager;
 mod uds_service;
 mod utils;
 
+use crate::ping::PingResult;
 use crate::types::{ConnectionConfig, DiagnosticResult};
 use crate::uds_client_manager::UdsClientManager;
 use std::sync::Arc;
@@ -62,6 +64,12 @@ fn test_security_access() -> String {
     "Security access test completed. Check console for results.".to_string()
 }
 
+// Ping 命令
+#[tauri::command]
+async fn ping_host(host: String) -> Result<PingResult, String> {
+    crate::ping::ping_host(host).await
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // 初始化日志
@@ -79,7 +87,8 @@ pub fn run() {
             get_connection_status,
             send_uds_command,
             get_connection_config,
-            test_security_access
+            test_security_access,
+            ping_host
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

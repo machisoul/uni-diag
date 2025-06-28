@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
-import { Button, Input, Fieldset, FormRow } from "../../components";
+import { Button, Input, Fieldset, FormRow, AnimatedPingButton } from "../../components";
 import { useUdsService } from "../../hooks/useUdsService";
+import { pingHost } from "../../interface";
 
 export interface EcuConnectionPanelProps {
   onConnectionChange?: (isConnected: boolean) => void;
@@ -90,6 +91,29 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
     }
   }, [udsState.isConnected, udsActions, logMessage]);
 
+  // Ping 功能 - 返回boolean值用于动画按钮
+  const handlePing = useCallback(async (): Promise<boolean> => {
+    try {
+      logMessage(`正在ping ${serverIp}...`, 'info');
+
+      const result = await pingHost(serverIp);
+
+      if (result.success) {
+        const timeInfo = result.time_ms ? ` (${result.time_ms.toFixed(2)}ms)` : '';
+        const ipInfo = result.ip ? ` [${result.ip}]` : '';
+        logMessage(`Ping ${result.host}${ipInfo} 成功${timeInfo} - 方法: ${result.method}`, 'success');
+        return true;
+      } else {
+        const errorInfo = result.error || '未知错误';
+        logMessage(`Ping ${result.host} 失败: ${errorInfo}`, 'error');
+        return false;
+      }
+    } catch (error) {
+      logMessage(`Ping异常: ${error}`, 'error');
+      return false;
+    }
+  }, [serverIp, logMessage]);
+
   return (
     <div className="ecu-connection-panel">
       <Fieldset legend="ECU连接管理">
@@ -138,19 +162,23 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
           >
             {udsState.isConnecting ? '连接中...' : udsState.isConnected ? '已连接' : '连接'}
           </Button>
-          <Button
-            variant="secondary"
-            onClick={handleDisconnect}
-            disabled={!udsState.isConnected}
-          >
-            断开
-          </Button>
+          <AnimatedPingButton
+            onPing={handlePing}
+            disabled={!serverIp.trim()}
+          />
           <Button
             variant="secondary"
             onClick={handleKeepSession}
             disabled={!udsState.isConnected}
           >
             会话保持
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleDisconnect}
+            disabled={!udsState.isConnected}
+          >
+            断开
           </Button>
         </FormRow>
 

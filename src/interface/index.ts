@@ -19,6 +19,7 @@ export {
   sendUdsCommand,
   getConnectionStatus,
   getConnectionConfig,
+  pingHost,
   hexToBytes,
   bytesToHex,
   printHex
@@ -27,7 +28,8 @@ export {
 // 导出类型
 export type {
   ConnectionConfig,
-  DiagnosticResult
+  DiagnosticResult,
+  PingResult
 } from './uds_doip';
 
 // 默认导出

@@ -21,6 +21,15 @@ export interface DiagnosticResult {
   timestamp: string;
 }
 
+export interface PingResult {
+  success: boolean;
+  host: string;
+  ip?: string;
+  time_ms?: number;
+  error?: string;
+  method: string;
+}
+
 // UDS 服务 ID 常量
 export const UDS_SERVICES = {
   DIAGNOSTIC_SESSION_CONTROL: 0x10,
@@ -163,6 +172,22 @@ export class UdsClientManager {
   }
 
   /**
+   * Ping 主机
+   */
+  async pingHost(host: string): Promise<PingResult> {
+    try {
+      return await invoke<PingResult>('ping_host', { host });
+    } catch (error) {
+      return {
+        success: false,
+        host,
+        error: `Ping失败: ${error}`,
+        method: 'error'
+      };
+    }
+  }
+
+  /**
    * 测试安全访问算法
    */
   async testSecurityAccess(): Promise<string> {
@@ -191,6 +216,7 @@ export const disconnectEcu = () => udsClientManager.disconnect();
 export const sendUdsCommand = (serviceId: string, data: string) => udsClientManager.sendUdsCommand(serviceId, data);
 export const getConnectionStatus = () => udsClientManager.getConnectionStatus();
 export const getConnectionConfig = () => udsClientManager.getConnectionConfig();
+export const pingHost = (host: string) => udsClientManager.pingHost(host);
 
 // 工具函数
 export const hexToBytes = (hex: string): Uint8Array => {
@@ -273,6 +299,7 @@ export default {
   sendUdsCommand,
   getConnectionStatus,
   getConnectionConfig,
+  pingHost,
   hexToBytes,
   bytesToHex,
   printHex
