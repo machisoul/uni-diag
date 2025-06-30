@@ -1,0 +1,111 @@
+.animated-send-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  min-width: 60px;
+  min-height: 28px;
+  transition: all 0.3s ease;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+}
+
+.animated-send-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.animated-send-button:focus {
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+}
+
+.button-text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.send-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+.send-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+}
+
+.send-spinner svg {
+  color: currentColor;
+}
+
+.send-icon.idle svg {
+  color: currentColor;
+}
+
+.send-icon.success svg {
+  color: currentColor;
+}
+
+.send-icon.error svg {
+  color: currentColor;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .animated-send-button {
+    padding: 8px 16px;
+    font-size: 14px;
+    min-height: 36px;
+    width: 100%;
+  }
+
+  .button-content {
+    gap: 8px;
+  }
+
+  .send-icon,
+  .send-spinner {
+    width: 16px;
+    height: 16px;
+  }
+
+  .send-icon svg,
+  .send-spinner svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .animated-send-button {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  .animated-send-button:focus {
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+}

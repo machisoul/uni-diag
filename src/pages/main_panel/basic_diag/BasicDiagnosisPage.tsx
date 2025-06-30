@@ -142,7 +142,7 @@ const BasicDiagnosisPage: React.FC<BasicDiagnosisPageProps> = ({ isConnected = f
     udsActions.updateConnectionStatus(isConnected);
   }, [isConnected, udsActions]);
 
-  const handleSendUdsCommand = async (serviceId: string, data: string, subService: string) => {
+  const handleSendUdsCommand = async (serviceId: string, data: string, subService: string): Promise<{ success: boolean; message?: string }> => {
     console.log("BasicDiagnosisPage handleSendUdsCommand called");
     console.log(`发送UDS命令: ${serviceId}, 数据: ${data}, 子服务: ${subService}`);
     console.log("传入的连接状态:", isConnected);
@@ -150,8 +150,7 @@ const BasicDiagnosisPage: React.FC<BasicDiagnosisPageProps> = ({ isConnected = f
 
     if (!isConnected) {
       console.error('未连接到ECU，无法发送命令');
-      alert('未连接到ECU，请先建立连接');
-      return;
+      return { success: false, message: '未连接到ECU，请先建立连接' };
     }
 
     try {
@@ -161,14 +160,14 @@ const BasicDiagnosisPage: React.FC<BasicDiagnosisPageProps> = ({ isConnected = f
 
       if (result.success) {
         console.log(`UDS命令执行成功: ${result.message}`);
-        alert(`UDS命令执行成功: ${result.message}`);
+        return { success: true, message: result.message };
       } else {
         console.error(`UDS命令执行失败: ${result.message}`);
-        alert(`UDS命令执行失败: ${result.message}`);
+        return { success: false, message: result.message };
       }
     } catch (error) {
       console.error(`UDS命令执行异常: ${error}`);
-      alert(`UDS命令执行异常: ${error}`);
+      return { success: false, message: `命令执行异常: ${error}` };
     }
   };
 

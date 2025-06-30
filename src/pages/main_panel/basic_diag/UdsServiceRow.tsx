@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import type { SelectOption } from "../../../components";
+import { AnimatedSendButton } from "../../../components";
 
 export interface UdsService {
   serviceId: string;
@@ -10,14 +11,14 @@ export interface UdsService {
 
 export interface UdsServiceRowProps {
   service: UdsService;
-  onSend?: (serviceId: string, data: string, subService: string) => void;
+  onSend?: (serviceId: string, data: string, subService: string) => Promise<{ success: boolean; message?: string }>;
 }
 
 const UdsServiceRow: React.FC<UdsServiceRowProps> = ({ service, onSend }) => {
   const [selectedSubService, setSelectedSubService] = useState(service.subServices[0]?.value || "");
   const [customData, setCustomData] = useState(service.defaultData);
 
-  const handleSend = () => {
+  const handleSend = useCallback(async (): Promise<{ success: boolean; message?: string }> => {
     console.log("UdsServiceRow handleSend clicked");
     console.log("onSend function:", onSend);
     console.log("service.serviceId:", service.serviceId);
@@ -26,11 +27,18 @@ const UdsServiceRow: React.FC<UdsServiceRowProps> = ({ service, onSend }) => {
 
     if (onSend) {
       console.log("Calling onSend function...");
-      onSend(service.serviceId, customData, selectedSubService);
+      try {
+        const result = await onSend(service.serviceId, customData, selectedSubService);
+        return result;
+      } catch (error) {
+        console.error("Send command error:", error);
+        return { success: false, message: `发送失败: ${error}` };
+      }
     } else {
       console.error("onSend function is not provided");
+      return { success: false, message: "onSend function is not provided" };
     }
-  };
+  }, [onSend, service.serviceId, customData, selectedSubService]);
 
   const handleSubServiceChange = (value: string) => {
     setSelectedSubService(value);
@@ -75,9 +83,12 @@ const UdsServiceRow: React.FC<UdsServiceRowProps> = ({ service, onSend }) => {
           />
         </div>
 
-        <button className="service-button" onClick={handleSend}>
+        <AnimatedSendButton
+          onSend={handleSend}
+          className="service-button"
+        >
           发送
-        </button>
+        </AnimatedSendButton>
       </div>
     </div>
   );
