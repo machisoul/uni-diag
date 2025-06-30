@@ -116,7 +116,7 @@ const EcuConnectionPanel: React.FC<EcuConnectionPanelProps> = ({
 
   return (
     <div className="ecu-connection-panel">
-      <Fieldset legend="ECU连接管理">
+      <Fieldset legend="ECU连接">
         <FormRow>
           <Input
             label="IP地址"
